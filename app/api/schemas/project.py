@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 class ProjectBase(BaseModel):
     name: str
@@ -6,3 +7,4 @@ class ProjectBase(BaseModel):
     votes: int
     category: str
     type: bool
+    created_at: datetime
