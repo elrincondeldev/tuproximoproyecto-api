@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from api.models.project import Project
 from api.schemas.project import ProjectBase
 from typing import List
+from datetime import datetime
 
 def create_project(db: Session, project: ProjectBase):
     db_project = Project(**project.model_dump())
@@ -13,6 +14,11 @@ def create_project(db: Session, project: ProjectBase):
 def get_projects(db: Session, page: int, page_size: int):
     offset = (page - 1) * page_size
     projects = db.query(Project).offset(offset).limit(page_size).all()
+    return projects
+
+def get_today_projects(db: Session, page: int, page_size: int):
+    offset = (page - 1) * page_size
+    projects = db.query(Project).filter(Project.created_at == datetime.now().date()).offset(offset).limit(page_size).all()
     return projects
 
 def get_frontend_projects(db: Session, page: int, page_size: int):

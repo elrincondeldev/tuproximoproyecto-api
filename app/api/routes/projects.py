@@ -16,6 +16,11 @@ def get_projects(page: int = Query(1, ge=1), page_size: int = Query(10, ge=1), d
     projects = project_service.get_projects(db, page, page_size)
     return projects
 
+@router.get("/get-today-projects", response_model=list[project.ProjectBase])
+def get_today_projects(page: int = Query(1, ge=1), page_size: int = Query(10, ge=1), db: Session = Depends(get_db)):
+    projects = project_service.get_today_projects(db, page, page_size)
+    return projects
+
 @router.get("/get-frontend-projects", response_model=list[project.ProjectBase])
 def get_frontend_projects(page: int = Query(1, ge=1), page_size: int = Query(10, ge=1), db: Session = Depends(get_db)):
     projects = project_service.get_frontend_projects(db, page, page_size)
