@@ -6,7 +6,7 @@ from pydantic import BaseModel
 import os
 from api.services import project as project_service
 from sqlalchemy.orm import Session
-from api.schemas.project import ProjectBase
+from api.schemas.project import ProjectBaseGpt
 from datetime import datetime
 from api.auth import security as verify_token
 
@@ -24,6 +24,7 @@ class Project(BaseModel):
     votes: int
     category: str
     type: bool
+    created_at: datetime
 
 class CustomJSONEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -78,7 +79,7 @@ async def generate_project_idea(db: Session, token: dict = Depends(verify_token.
 
     project_data = json.loads(response.choices[0].message.content)
 
-    project = ProjectBase(**project_data)
+    project = ProjectBaseGpt(**project_data)
 
     project_service.create_project(db, project)
     
