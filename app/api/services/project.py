@@ -49,7 +49,7 @@ def get_fullstack_projects(db: Session, page: int, page_size: int):
     projects_data = [project.serialize() for project in projects]
     total_projects = db.query(Project).filter(Project.category == "fullstack").count()
     total_pages = total_projects // page_size
-    return total_projects, total_pages
+    return projects_data, total_pages
 
 def get_projects_names(db: Session) -> List[str]:
     projects_names = db.query(Project.name).all()
