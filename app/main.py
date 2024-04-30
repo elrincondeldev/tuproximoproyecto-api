@@ -7,6 +7,18 @@ from api.routes import newsletter
 from api.routes import proposedProjects
 from db.database import engine, Base
 from api.auth import token
+import sentry_sdk
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+SENTRY_DSN = os.getenv("SENTRY_DSN")
+
+sentry_sdk.init(
+    dsn=SENTRY_DSN,
+    traces_sample_rate=1.0,
+)
 
 app = FastAPI()
 

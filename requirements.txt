@@ -5,3 +5,4 @@ python-dotenv==1.0.1
 python_jose==3.3.0
 SQLAlchemy==2.0.29
 uvicorn==0.29.0
+sentry-sdk==2.0.1
