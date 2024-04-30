@@ -4,6 +4,7 @@ from api.schemas import project
 from api.services import project as project_service
 from db.database import get_db
 from fastapi import Query
+from typing import Dict, Tuple, Union
 
 router = APIRouter()
 
@@ -11,30 +12,29 @@ router = APIRouter()
 def create_project(project: project.ProjectBase, db: Session = Depends(get_db)):
     return project_service.create_project(db, project)
 
-@router.get("/get-projects", response_model=list[project.ProjectBase])
+@router.get("/get-projects", response_model=Dict[str, Union[list[project.ProjectBase], int]])
 def get_projects(page: int = Query(1, ge=1), page_size: int = Query(10, ge=1), db: Session = Depends(get_db)):
-    projects = project_service.get_projects(db, page, page_size)
-    return projects
+    projects_data, total_pages = project_service.get_projects(db, page, page_size)
+    return {"projects": projects_data, "total_pages": total_pages}
 
-@router.get("/get-today-projects", response_model=list[project.ProjectBase])
+@router.get("/get-today-projects", response_model=Dict[str, Union[list[project.ProjectBase], int]])
 def get_today_projects(page: int = Query(1, ge=1), page_size: int = Query(10, ge=1), db: Session = Depends(get_db)):
-    projects = project_service.get_today_projects(db, page, page_size)
-    return projects
+    projects_data, total_pages = project_service.get_today_projects(db, page, page_size)
+    return {"projects": projects_data, "total_pages": total_pages}
 
-@router.get("/get-frontend-projects", response_model=list[project.ProjectBase])
+@router.get("/get-frontend-projects", response_model=Dict[str, Union[list[project.ProjectBase], int]])
 def get_frontend_projects(page: int = Query(1, ge=1), page_size: int = Query(10, ge=1), db: Session = Depends(get_db)):
-    projects = project_service.get_frontend_projects(db, page, page_size)
-    return projects
-
-@router.get("/get-backend-projects", response_model=list[project.ProjectBase])
+    projects_data, total_pages = project_service.get_frontend_projects(db, page, page_size)
+    return {"projects": projects_data, "total_pages": total_pages}
+@router.get("/get-backend-projects", response_model=Dict[str, Union[list[project.ProjectBase], int]])
 def get_backend_projects(page: int = Query(1, ge=1), page_size: int = Query(10, ge=1), db: Session = Depends(get_db)):
-    projects = project_service.get_backend_projects(db, page, page_size)
-    return projects
+    projects_data, total_pages = project_service.get_backend_projects(db, page, page_size)
+    return {"projects": projects_data, "total_pages": total_pages}
 
-@router.get("/get-fullstack-projects", response_model=list[project.ProjectBase])
+@router.get("/get-fullstack-projects", response_model=Dict[str, Union[list[project.ProjectBase], int]])
 def get_fullstack_projects(page: int = Query(1, ge=1), page_size: int = Query(10, ge=1), db: Session = Depends(get_db)):
-    projects = project_service.get_fullstack_projects(db, page, page_size)
-    return projects
+    projects_data, total_pages = project_service.get_fullstack_projects(db, page, page_size)
+    return {"projects": projects_data, "total_pages": total_pages}
 
 @router.get("/get-projects-names", response_model=list[str])
 def get_projects_names(db: Session = Depends(get_db)):
