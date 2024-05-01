@@ -7,8 +7,9 @@ import os
 from api.services import project as project_service
 from sqlalchemy.orm import Session
 from api.schemas.project import ProjectBaseGpt
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from api.auth import security as verify_token
+import pytz
 
 load_dotenv()
 
@@ -33,6 +34,12 @@ class CustomJSONEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
     
 async def generate_project_idea(db: Session, token: dict = Depends(verify_token.verify_token)):
+    spain_tz = pytz.timezone('Europe/Madrid')
+
+    current_datetime = datetime.now(spain_tz)
+
+    current_datetime_isoformat = current_datetime.isoformat()
+
     projectsNames = project_service.get_projects_names(db)
 
     projects_list = "\n".join([f"- {name}" for name in projectsNames])
@@ -58,7 +65,8 @@ async def generate_project_idea(db: Session, token: dict = Depends(verify_token.
       "description": "",
       "votes": 0,
       "category": "",
-      "type": true
+      "type": true,
+      "created_at": "{current_datetime_isoformat}"
     }}
     """
 
